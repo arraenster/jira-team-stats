@@ -4,7 +4,7 @@ Team Statistics via Jira API. Calculates stats in some specific way.
 Based on https://github.com/chobie/jira-api-restclient.
 Uses PHP Phalcon Framework.
 
-##Possible routes
+### Possible routes
 
 * `workload/1/2017` - Workload in jira-points by developers by each project calculated per month
 * `sprint/154` - Get sprint info by its id calculated by developers.
