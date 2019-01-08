@@ -1,0 +1,97 @@
+<?php
+
+//just for nice output
+$usersCompareTable =
+    [
+        '<jiralogin>'           => '<fullname>'
+        //...
+    ];
+
+?>
+
+<h2>Статистика по учасникам</h2>
+
+<?php
+
+$currentYear = date('Y');
+
+for( $i=2017; $i<=$currentYear; $i++ )
+{
+    echo "<a href='/team/$i'>$i</a>&nbsp";
+}
+
+echo "<br>";
+?>
+
+<table class="table table-striped" width="100%">
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Назва</th>
+        <th>Статус</th>
+        <th>Кількість задач</th>
+        <th>Зроблено задач</th>
+        <th>Відношення по задачам</th>
+        <th>Кількість поінтів</th>
+        <th>Зроблено поінтів</th>
+        <th>Відношення по поінтам</th>
+        <th>AVG зроблено поінтів розробником</th>
+        <th>Учасник</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+
+        $number = 1;
+        foreach ($sprints as $id => $sprint)
+        {
+            echo '<tr>';
+                echo '<td>' . $id . '</td>';
+                echo '<td>' . $sprint['name'] . '</td>';
+                echo '<td>' . $sprint['state'] . '</td>';
+                echo '<td>' . $sprint['taskTotal'] . '</td>';
+                echo '<td>' . $sprint['taskDone'] . '</td>';
+                echo '<td>' . number_format($sprint['taskDone'] / $sprint['taskTotal'], 2) . '</td>';
+                echo '<td>' . $sprint['spTotal'] . '</td>';
+                echo '<td>' . $sprint['spDone'] . '</td>';
+                echo '<td>' . (($sprint['spTotal'] != 0) ? number_format($sprint['spDone'] / $sprint['spTotal'], 2) : 0) . '</td>';
+                echo '<td>' . number_format($sprint['spDone'] / count($sprint['developers']), 2) . '</td>';
+
+                echo '<td>';
+
+                echo '<table class="table table-striped">';
+                echo '<thead>';
+                    echo '<tr>';
+                    echo '<th>Ім\'я</th>';
+                    echo '<th>Зроблено задач</th>';
+                    echo '<th>Зроблено поінтів</th>';
+                    echo '</tr>';
+                echo '</thead>';
+
+                echo '<tbody>';
+
+                $story_points = [];
+                foreach ($sprint['developers'] as $key => $row)
+                {
+                    $story_points[$key] = $row['spDone'];
+                }
+                array_multisort($story_points, SORT_DESC, $sprint['developers']);
+
+                foreach ($sprint['developers'] as $name => $developer) {
+                    echo '<tr>';
+                    echo '<td>' . $name . '</td>';
+                    echo '<td>' . $developer['taskDone'] . '</td>';
+                    echo '<td>' . $developer['spDone'] . '</td>';
+                    echo '</tr>';
+                }
+
+                echo '</tbody>';
+                echo '</table>';
+
+                echo '</td>';
+            echo '</tr>';
+            $number++;
+        }
+    ?>
+    </tbody>
+</table>

@@ -1,0 +1,130 @@
+<?php
+
+if (strtotime($sprintStartDate) < time())
+{
+    $startLabel = 'почався';
+}
+else
+{
+    $startLabel = 'почнеться';
+}
+
+if (strtotime($sprintEndDate) < time())
+{
+    $endLabel = 'закінчився';
+}
+else
+{
+    $endLabel = 'закінчиться';
+}
+
+echo '<h2>Підрахуємо по спринту #' . $sprintId .' (' . $sprintName . '),<br>що ' . $startLabel . ' ' . $sprintStartDate . ' та ' . $endLabel . ' ' . $sprintEndDate . '</h2>';
+
+echo '<table class="table table-striped" width="90%">';
+echo '<thead>';
+echo '<tr>
+    <th>Ім\'я</th>    
+    <th>Завдань на початок спринта</th>
+    <th>SP</th>
+    <th>Завдань на кінець спринта</th>
+    <th>SP</th>
+    <th>Виконано завдань</th>
+    <th>SP</th>
+    </tr>';
+echo '</thead>';
+echo '<tbody>';
+foreach ($result as $name => $row)
+{
+
+    if ($row['endOfSprint']['done']['sp'] >= $row['startOfSprint']['sp'] && $row['endOfSprint']['count'] == $row['startOfSprint']['count'])
+    {
+        $rowClass = 'success';
+    }
+
+    if ($row['endOfSprint']['done']['sp'] < $row['startOfSprint']['sp'])
+    {
+        $rowClass = 'danger';
+    }
+
+    if ($row['endOfSprint']['count'] != $row['startOfSprint']['count'])
+    {
+        $rowClass = 'warning';
+    }
+
+    if ($row['endOfSprint']['done']['sp'] >= $row['startOfSprint']['sp'])
+    {
+        $spanClass = 'success';
+    }
+
+    if ($row['endOfSprint']['done']['sp'] < $row['startOfSprint']['sp'] && $row['endOfSprint']['count'] == $row['startOfSprint']['count'])
+    {
+        $spanClass = 'danger';
+    }
+
+    if ($row['endOfSprint']['done']['sp'] < $row['startOfSprint']['sp'] && $row['endOfSprint']['count'] != $row['startOfSprint']['count'])
+    {
+        $spanClass = 'warning';
+    }
+
+    if ($row['endOfSprint']['count'] != $row['startOfSprint']['count'] && $row['endOfSprint']['done']['sp'] > $row['startOfSprint']['sp'])
+    {
+        $rowClass = 'golden';
+    }
+    echo '<tr class="' . $rowClass . '">';
+
+    echo '<td>' . $name . '</td>';
+    echo '<td>' . ((!empty($row['startOfSprint']['count'])) ? $row['startOfSprint']['count'] : 0) . '</td>';
+    echo '<td><span class="label label-default">' . ((!empty($row['startOfSprint']['sp'])) ? $row['startOfSprint']['sp'] : 0) . '</span></td>';
+    echo '<td>' . ((!empty($row['endOfSprint']['count'])) ? $row['endOfSprint']['count'] : 0) . '</td>';
+    echo '<td><span class="label label-default">' . ((!empty($row['endOfSprint']['sp'])) ? $row['endOfSprint']['sp'] : 0) . '</span></td>';
+    echo '<td>' . ((!empty($row['endOfSprint']['done']['count'])) ? $row['endOfSprint']['done']['count'] : 0) . '</td>';
+    echo '<td><span class="label label-' . $spanClass . '">' . ((!empty($row['endOfSprint']['done']['sp'])) ? $row['endOfSprint']['done']['sp'] : 0) . '</span></td>';
+    echo '</tr>';
+}
+echo '</tbody>';
+echo '</table>';
+
+echo '<h4>Легенда:</h4>';
+
+echo '<div class="row">';
+    echo '<div class="col-md-6">';
+
+    echo '<table class="table">';
+        echo '<tbody>';
+    echo '<tr class="success"><td>Не було Scope Change. Всі завдання виконано.</td></tr>';
+    echo '<tr class="warning"><td>Був Scope Change.</td></tr>';
+    echo '<tr class="danger"><td>Не було Scope Change. Виконано меньше запланованого</td></tr>';
+        echo '</tbody>';
+    echo '</table>';
+
+    echo '</div>';
+    echo '<div class="col-md-6">';
+    echo '</div>';
+echo '</div>';
+
+echo '<div class="row">';
+    echo '<div class="col-md-2">';
+        echo '<span class="label label-default">0</span>';
+    echo '</div>';
+    echo '<div class="col-md-10">';
+        echo 'Сумарна кількість Story Points';
+    echo '</div>';
+    echo '<div class="col-md-2">';
+        echo '<span class="label label-success">0</span>';
+    echo '</div>';
+    echo '<div class="col-md-10">';
+        echo 'Закрив заплановану кількість поінтів або більше, ніж заплановано в разі Scope Change';
+    echo '</div>';
+    echo '<div class="col-md-2">';
+        echo '<span class="label label-warning">0</span>';
+    echo '</div>';
+    echo '<div class="col-md-10">';
+        echo 'Закрив меньше запланованого, але був Scope Change';
+    echo '</div>';
+    echo '<div class="col-md-2">';
+        echo '<span class="label label-danger">0</span>';
+    echo '</div>';
+    echo '<div class="col-md-10">';
+        echo 'Закрив меньше запланованого. Не було Scope Change';
+    echo '</div>';
+echo '</div>';

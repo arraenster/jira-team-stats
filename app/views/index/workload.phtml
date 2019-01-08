@@ -1,0 +1,51 @@
+<?php
+
+$newDevelopersArr = [];
+$usersCompareTable =
+    [
+        '<jiralogin>'           => '<fullname>'
+        //...
+    ];
+
+$projectNames =
+    [
+        '<projectkey'   => 'projectname',
+        //...
+    ];
+
+foreach ($usersCompareTable as $login => $fullName) {
+    $newDevelopersArr[$fullName] = (!empty($result[$login]) ? $result[$login] : []);
+}
+
+echo '<h2>Розподіл завантаження за ' . $month . '</h2>';
+
+echo '<table class="table table-striped" width="90%">';
+echo '<thead>';
+
+echo '<tr>
+    <th>Ім\'я </th>';
+
+foreach($projectNames as $key => $name)
+{
+    echo '<th>' . $key . '</th>';
+}
+
+    echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+
+foreach ($newDevelopersArr as $name => $row)
+{
+    echo '<tr>';
+    echo '<td>' . $name . '</td>';
+
+    foreach($projectNames as $projectKey => $name)
+    {
+        echo '<td>' . ((isset($row['projects'][$projectKey])) ? '<b>' . $row[$projectKey]['SYS4']['percents'] . '</b>' : ' ') . '</td>';
+    }
+
+    echo '</tr>';
+}
+
+echo '</tbody>';
+echo '</table>';

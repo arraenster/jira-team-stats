@@ -1,0 +1,33 @@
+
+<h2>Генерація ключа ліцензії</h2>
+
+<form action="/generate/license" method="POST" name="generate_license_form">
+    <table class="table table-striped" width="30%">
+        <tbody>
+            <tr>
+                <td>Назва: </td><td><input type="text" name="title" value="Free trial" size="40"></td>
+            </tr>
+            <tr>
+                <td>Кількість користувачів: </td><td><input type="number" name="users_count" min="1" max="999999999" value="10"></td>
+            <tr>
+                <td>Дата діі по: </td><td><input type="text" name="expired_date" value="<?= date('Y-m-d') ?>"></td>
+            <tr>
+                <td colspan="2"><input type="submit" name="generate_license" value="Генерація"></td>
+            </tr>
+        </tbody>
+</table>
+
+<?php
+
+if( !empty($signature) && !empty($is_valid)  )
+{
+    echo "<hr>";
+
+    echo "<h4>Ключ ліцензії:</h4> <textarea cols='140' rows='5'>" . $signature . "</textarea><br>";
+
+    echo "<span class='text-info'>Заголовок:</span> " . $title . "<br>";
+    echo "<span class='text-info'>Кількість користувачів:</span> " . $users_count . "<br>";
+    echo "<span class='text-info'>Дата по:</span> " . $expired_date . "<br>";
+}
+
+?>
