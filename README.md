@@ -1,7 +1,7 @@
 # jira-team-stats
 Team Statistics via Jira API. Calculates stats in some specific way.
 
-Based on https://github.com/chobie/jira-api-restclient
+Based on https://github.com/chobie/jira-api-restclient.
 Uses PHP Phalcon Framework.
 
 ##Possible routes
